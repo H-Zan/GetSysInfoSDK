@@ -238,5 +238,16 @@ public class SharePreferencePersistance extends BasePersistance {
         }
         return map;
     }
-
+    public boolean putString(Context context,String key, String value) {
+        SharedPreferences preferences = context.getSharedPreferences("syssdk_setting", Context.MODE_PRIVATE);
+        Editor editor = preferences.edit();
+        editor.clear();
+        editor.putString(key, value).apply();
+        return editor.commit();
+    }
+    
+    public String getString(Context context,String key, String defValue) {
+        SharedPreferences preferences = context.getSharedPreferences("syssdk_setting", Context.MODE_PRIVATE);
+        return preferences.getString(key, defValue);
+    }
 }

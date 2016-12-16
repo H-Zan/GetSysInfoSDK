@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 
 public class L {
-	public static boolean sDebug = false;
+	public static boolean sDebug = true;
 	private static String sTag = "Mai-SDK";
 	private static final int JSON_INDENT = 2;
 	

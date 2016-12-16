@@ -55,7 +55,7 @@ public class MaiPath {
         if (isTest && testMode == 1) {
             BASIC_PATH = BASIC_PATH_TEST1;
             LogUtil.D("Mode","Test-1-test");
-        }else if (isTest&&testMode == 2){
+        }else if (isTest && testMode == 2){
             BASIC_PATH = BASIC_PATH_TEST2;
             LogUtil.D("Mode","Test-2-ip");
         }else if (!isTest){
@@ -65,7 +65,7 @@ public class MaiPath {
         MAI_PATH_REQUEST = BASIC_PATH + "mar";
         MAI_PATH_MONITOR = BASIC_PATH + "me";
         MAI_PATH_POSTLOG = BASIC_PATH + "ml";
-        L.e("path",MAI_PATH_REQUEST+"--"+MAI_PATH_MONITOR+"--"+MAI_PATH_POSTLOG);
+        L.e("path::::\n",MAI_PATH_REQUEST+"\n"+MAI_PATH_MONITOR+"\n"+MAI_PATH_POSTLOG);
     }
 
 

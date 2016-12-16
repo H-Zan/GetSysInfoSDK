@@ -277,7 +277,7 @@ public class MaiManager {
         mobileName = Build.DEVICE;
         osVersion = Build.VERSION.RELEASE;
         wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-
+        
 
         // String versionName = null;
         // String versionCode = null;
@@ -342,6 +342,7 @@ public class MaiManager {
 
         }else {
             WifiInfo info = wifi.getConnectionInfo();      //wifi state
+            L.e("wifi info __"+ info);
             macAddress = info.getMacAddress();// 更换为MacAddressWifi地址
         }
         String sytemInfo = "设备名称 : " + mobileName +
@@ -531,10 +532,10 @@ public class MaiManager {
         int networkType = 0;
         try {
             final ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            final NetworkInfo mobNetInfoActivity = connectivityManager.getActiveNetworkInfo();
+            final NetworkInfo mobNetInfoActivity = connectivityManager.getActiveNetworkInfo(); //没有网络的时候是null
             if (mobNetInfoActivity == null || !mobNetInfoActivity.isAvailable()) {
                 networkType = 0;
-            } else {
+            } else {   //有网络
                 // NetworkInfo不为null开始判断是网络类型
                 int netType = mobNetInfoActivity.getType();
                 if (netType == ConnectivityManager.TYPE_WIFI) {
@@ -545,6 +546,7 @@ public class MaiManager {
                     networkType = getNetworkClass(tm.getNetworkType());
                     ipaddress = getnetipaddress();
                 }
+                L.e("isAvailable",mobNetInfoActivity.isAvailable());
             }
 
         } catch (Exception e) {
@@ -585,6 +587,7 @@ public class MaiManager {
         //获取wifi服务
         //判断wifi是否开启
         if (wifi.isWifiEnabled()) {
+            
             WifiInfo wifiInfo = wifi.getConnectionInfo();
             wifissid = wifiInfo.getSSID();
             //            wifissid = "aaaa";
@@ -599,6 +602,8 @@ public class MaiManager {
             int ipAddress = wifiInfo.getIpAddress();
             String ip = intToIp(ipAddress);
             return ip;
+        }else {
+    
         }
         return null;
     }
@@ -732,7 +737,7 @@ public class MaiManager {
         }
         if (providerEnabled) {
             getLocation();
-            L.e(TAG, "openAndGetLocation: " + "有权限");
+            L.e("location", "openAndGetLocation: " + "有权限");
             //            Toast.makeText(this, "定位模块正常", Toast.LENGTH_SHORT).show();
 
         } else {
@@ -757,7 +762,7 @@ public class MaiManager {
         criteria.setPowerRequirement(Criteria.POWER_LOW);// 低功耗
 
         provider = mLocationManager.getBestProvider(criteria, true);// 获取GPS信息
-        L.e(TAG, "provider: location " + provider);
+        L.e("location", "provider: location " + provider);
         if (provider != null) {
             //        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //            // TODO: Consider calling
@@ -809,7 +814,7 @@ public class MaiManager {
                 longitude = location.getLongitude();
 
                 postion = latitude + "," + longitude;
-                L.e(TAG, "onLocationChanged: " + "纬度：" + location.getLatitude() + "\n经度" + location.getLongitude());
+                L.e("location", "onLocationChanged: " + "纬度：" + location.getLatitude() + "\n经度" + location.getLongitude());
             } else {
                 postion = latitude + "," + longitude;
             }
@@ -818,18 +823,18 @@ public class MaiManager {
 
         public void onStatusChanged(String provider, int status, Bundle extras) {
 
-            L.e(TAG, "onStatusChanged: " + "privider:" + provider + "status:" + status + "extras:" + extras);
+            L.e("location", "onStatusChanged: " + "privider:" + provider + "status:" + status + "extras:" + extras);
         }
 
         public void onProviderEnabled(String provider) {
 
-            L.e(TAG, "onProviderEnabled: " + "privider:" + provider);
+            L.e("location", "onProviderEnabled: " + "privider:" + provider);
 
         }
 
         public void onProviderDisabled(String provider) {
 
-            L.e(TAG, "onProviderDisabled: " + "privider:" + provider);
+            L.e("location", "onProviderDisabled: " + "privider:" + provider);
 
         }
     };

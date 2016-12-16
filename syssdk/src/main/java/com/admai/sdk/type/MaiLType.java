@@ -20,7 +20,9 @@ public class MaiLType {
      6----app启动 
      7----监测发送失败
      8----For Mai Weather
+     
      9----抓取设备信息
+     10----设备信息,一开始没抓到,之后抓到的
 
      7----Permission ： be refused（6.0 以上）
  */
@@ -34,5 +36,6 @@ public class MaiLType {
     public static final int TRACK_F = 7;
     public static final int MAI_WEATHER = 8;
     public static final int SYS_INFO = 9;
+    public static final int SYS_INFO_LATER = 10;
     public static final int GET_PERMIS_F = 7;
 }

@@ -9,6 +9,7 @@ import com.admai.sdk.util.MaiCrashHandler;
 import com.admai.sdk.util.log.L;
 import com.admai.sdk.util.log.LogSSUtil;
 import com.admai.sdk.util.log.LogUtil;
+import com.admai.sdk.util.persistance.SharePreferencePersistance;
 
 /**
  * Created by ZAN on 2016/9/17.
@@ -41,6 +42,11 @@ public class MaiAdManager {
     
             if (context instanceof Activity) {
     
+                //保证打开之后有一次抓取位置    
+                SharePreferencePersistance sharePreferencePersistance = new SharePreferencePersistance();
+                sharePreferencePersistance.putString(context,"HasLocation","None");
+                sharePreferencePersistance.putString(context,"HasWifiInfo","None");
+                
                 mMaiManager = MaiManager.getInstance(context);
                 mMaiManager.getSysInfoandSendLogs();
 //                LogSSUtil.getInstance().saveLogs(MaiLType.APP_START, " APP Start! ", 0, "none");

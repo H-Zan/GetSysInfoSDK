@@ -13,7 +13,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		MaiAdManager instance = MaiAdManager.getInstance();
 		instance.init(this);
-		//		instance.isTest(false);
+		instance.isTest(true);
 		
 		
 		MaiAdManager.getInstance().DebugModeMine(true);

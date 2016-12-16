@@ -51,6 +51,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <receiver android:name="com.admai.sdk.mai.MaiInfoReceiver" >
+            <intent-filter>
+                <action android:name="android.net.wifi.STATE_CHANGE"/>
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+                <action android:name="android.location.PROVIDERS_CHANGED" />  
+                <!--<action android:name="android.location.MODE_CHANGED" />-->
+            </intent-filter>
+        </receiver>
+            
     </application>
 
 </manifest>
