@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.admai.sdk.type.MaiLType;
+import com.admai.sdk.util.MaiUtils;
 import com.admai.sdk.util.log.L;
 import com.admai.sdk.util.log.LogSSUtil;
 import com.admai.sdk.util.log.LogUtil;
@@ -67,6 +68,8 @@ public class MaiInfoReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		mContext = context;
+		SharePreferencePersistance share = new SharePreferencePersistance();
+		       
 		if (LocationManager.MODE_CHANGED_ACTION.equals(intent.getAction())) {
 			L.e("GPS");
 
@@ -77,7 +80,6 @@ public class MaiInfoReceiver extends BroadcastReceiver {
 			boolean gpsEnabled = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 			if(gpsEnabled){
 				L.e("gps-已打开");
-				SharePreferencePersistance share = new SharePreferencePersistance();
 				String string = share.getString(mContext, LOCATION_KEY, "None");
 				//已经有过位置
 				if (string.equals("HasLocation")) {
@@ -88,6 +90,7 @@ public class MaiInfoReceiver extends BroadcastReceiver {
 					Toast.makeText(mContext, string + ",NoLocation", Toast.LENGTH_SHORT).show();
 					//获取位置
 					openAndGetLocation(context);
+					
 				}
 //				MaiManager.getInstance(context).getSysInfo(context);
 //				postion=MaiManager.getPostion();
@@ -111,8 +114,22 @@ public class MaiInfoReceiver extends BroadcastReceiver {
 		if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
 			//测试
 			int networktype = networktype(context);
-			LogSSUtil.getInstance().saveLogs(MaiLType.SYS_INFO_LATER, "networktype:" + networktype + "-ipaddress:" + ipaddress + "-wifissid:" + wifissid, 0, "none");
-			LogSSUtil.getInstance().sendLogs();
+			String ssidLast = share.getString(context, "WifiSSID", "None222");
+			if (networktype != 0 && networktype != 2) { //流量
+				L.e("MaiInfo---","networktype1 :"+networktype);
+				LogSSUtil.getInstance().saveLogs(MaiLType.SYS_INFO_LATER, "networktype:" + networktype + "-ipaddress:" + ipaddress , 0, "none");
+				LogSSUtil.getInstance().sendLogs();
+			}else if (networktype == 2){ //wifi 1.上次没得到, 2.wifi切换
+				if (ssidLast.equals("None222") || !ssidLast.equals(wifissid)) {
+					share.putString(context,"WifiSSID",wifissid);
+					LogSSUtil.getInstance().saveLogs(MaiLType.SYS_INFO_LATER, "networktype:" + networktype + "-ipaddress:" + ipaddress + "-wifissid:" + wifissid, 0, "none");
+					LogSSUtil.getInstance().sendLogs();
+					L.e("MaiInfo---","ssidLast:"+ssidLast);
+				}
+				L.e("MaiInfo---","ssidLast.equals(wifissid):"+ssidLast.equals(wifissid));
+			}else {
+				L.e("MaiInfo---","networktype2 :"+networktype);
+			}
 			L.e("CONNECTIVITY_ACTION", "networktype:" + networktype + "-ipaddress:" + ipaddress + "-wifissid:" + wifissid);
 			//连接了之后开启服务? 或者直接不用服务
 		}
@@ -186,7 +203,7 @@ public class MaiInfoReceiver extends BroadcastReceiver {
 				}
 			}
 			if (provider != null) {
-				if (location == null && provider.contains("network")) {  //没有wifi 情况下 变成gps
+				if (location == null && provider.contains("network") && !MaiUtils.isWifi(con)) {  //没有wifi 情况下 变成gps
 					criteria.setPowerRequirement(Criteria.POWER_HIGH);// 高功耗  gps
 					provider = mLocationManager.getBestProvider(criteria, true);// 获取GPS信息
 					if (provider != null) {
@@ -275,6 +292,8 @@ public class MaiInfoReceiver extends BroadcastReceiver {
 	
 	
 	
+	//如果nettype!=wifi且!=0,save
+	//如果nettype==wifi , 判断这次ssid与上次ssid 是否一样,不一样 save
 	
 	//网络相关
 	public int networktype(Context context) {

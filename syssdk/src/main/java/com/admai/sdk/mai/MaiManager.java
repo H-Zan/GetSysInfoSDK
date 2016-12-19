@@ -32,6 +32,7 @@ import com.admai.sdk.util.log.L;
 import com.admai.sdk.util.log.LogSSUtil;
 import com.admai.sdk.util.log.LogUtil;
 import com.admai.sdk.util.log.MaiLogs;
+import com.admai.sdk.util.persistance.SharePreferencePersistance;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -356,7 +357,6 @@ public class MaiManager {
                                "\n手机网络类型: " + phoneType +
                                "\nMAC地址: " + macAddress;
         L.e("sytemInfo",sytemInfo);
-
         applicationName = getApplicationName();
         packageName = context.getPackageName();
         operatorName = getOperatorName();
@@ -370,7 +370,6 @@ public class MaiManager {
         }.start();
 
         user_agent = getUser_agent();
-
         WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         outMetrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(outMetrics);
@@ -542,6 +541,11 @@ public class MaiManager {
                     // wifi net处理
                     networkType = 2;
                     ipaddress = getwifiipaddress();
+                    SharePreferencePersistance share = new SharePreferencePersistance();
+                    boolean wifiSSID = share.putString(context, "WifiSSID", wifissid);
+                    L.e("MaiInfo---","wifissid:"+wifissid);
+                    String wifiSSIDeeeeee = share.getString(context, "WifiSSID", "NNNNNNNNNN");
+                    L.e("MaiInfo---","wifissid:"+wifissid+",,put wifiSSID:"+wifiSSID+",wifiSSIDeeeeee:"+wifiSSIDeeeeee);
                 } else if (netType == ConnectivityManager.TYPE_MOBILE) {
                     networkType = getNetworkClass(tm.getNetworkType());
                     ipaddress = getnetipaddress();

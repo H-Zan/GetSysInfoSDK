@@ -41,12 +41,11 @@ public class MaiAdManager {
         if (context != null) {
     
             if (context instanceof Activity) {
-    
                 //保证打开之后有一次抓取位置    
-                SharePreferencePersistance sharePreferencePersistance = new SharePreferencePersistance();
-                sharePreferencePersistance.putString(context,"HasLocation","None");
-                sharePreferencePersistance.putString(context,"HasWifiInfo","None");
-                
+                SharePreferencePersistance share = new SharePreferencePersistance();
+                share.putString(context,"HasLocation","None");
+                share.putString(context,"NetworkType","None");
+                share.putString(context,"WifiSSID","None");
                 mMaiManager = MaiManager.getInstance(context);
                 mMaiManager.getSysInfoandSendLogs();
 //                LogSSUtil.getInstance().saveLogs(MaiLType.APP_START, " APP Start! ", 0, "none");
